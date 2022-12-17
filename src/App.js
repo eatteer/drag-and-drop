@@ -1,27 +1,19 @@
 import { useRef, useState } from "react";
 
-const initialTodos = [
+const initialLists = [
   {
     id: 1,
-    name: "Practice React",
-    state: "Todo",
-  },
-  {
-    id: 2,
-    name: "Learn how to drag and drop",
-    state: "In progress",
-  },
-  {
-    id: 3,
-    name: "Format PC",
-    state: "Done",
+    name: "Todo",
   },
 ];
 
 function App() {
   const [newTodoName, setNewTodoName] = useState("");
-  const [todos, setTodos] = useState(initialTodos);
+  const [todos, setTodos] = useState([]);
   const todoIdBeingDraggedRef = useRef(null);
+
+  const [newListName, setNewListName] = useState("");
+  const [lists, setLists] = useState(initialLists);
 
   const handleAddNewTodo = (event) => {
     event.preventDefault();
@@ -33,9 +25,23 @@ function App() {
     setTodos((previousTodos) => [...previousTodos, newTodo]);
   };
 
+  const handleAddNewList = (event) => {
+    event.preventDefault();
+    const newList = {
+      id: lists.length + 1,
+      name: newListName,
+    };
+    setLists((previousLists) => [...previousLists, newList]);
+  };
+
   const handleNewTodoOnChange = (event) => {
     const { value } = event.target;
     setNewTodoName(value);
+  };
+
+  const handleNewListOnChange = (event) => {
+    const { value } = event.target;
+    setNewListName(value);
   };
 
   const handleOnDragStartTodo = (todoId) => {
@@ -82,82 +88,47 @@ function App() {
           />
         </form>
       </section>
+      <section>
+        <h2>Add list</h2>
+        <form onSubmit={handleAddNewList}>
+          <input
+            placeholder="New list name"
+            onChange={handleNewListOnChange}
+            value={newListName}
+          />
+        </form>
+      </section>
       <section className="board">
-        <div>
-          <h3>Todo</h3>
-          <div
-            data-list-state="Todo"
-            onDragOver={handleOnDragOverTodo}
-            onDrop={handleOnDropTodo}
-            className="list"
-          >
-            {todos &&
-              todos
-                .filter((todo) => todo.state === "Todo")
-                .map((todo) => {
-                  return (
-                    <div
-                      key={todo.id}
-                      draggable
-                      onDragStart={() => handleOnDragStartTodo(todo.id)}
-                      className="todo"
-                    >
-                      <p>{todo.name}</p>
-                    </div>
-                  );
-                })}
-          </div>
-        </div>
-        <div>
-          <h3>In Progress</h3>
-          <div
-            data-list-state="In progress"
-            onDragOver={handleOnDragOverTodo}
-            onDrop={handleOnDropTodo}
-            className="list"
-          >
-            {todos &&
-              todos
-                .filter((todo) => todo.state === "In progress")
-                .map((todo) => {
-                  return (
-                    <div
-                      key={todo.id}
-                      draggable
-                      onDragStart={() => handleOnDragStartTodo(todo.id)}
-                      className="todo"
-                    >
-                      <p>{todo.name}</p>
-                    </div>
-                  );
-                })}
-          </div>
-        </div>
-        <div>
-          <h3>Done</h3>
-          <div
-            data-list-state="Done"
-            onDragOver={handleOnDragOverTodo}
-            onDrop={handleOnDropTodo}
-            className="list"
-          >
-            {todos &&
-              todos
-                .filter((todo) => todo.state === "Done")
-                .map((todo) => {
-                  return (
-                    <div
-                      key={todo.id}
-                      draggable
-                      onDragStart={() => handleOnDragStartTodo(todo.id)}
-                      className="todo"
-                    >
-                      <p>{todo.name}</p>
-                    </div>
-                  );
-                })}
-          </div>
-        </div>
+        {lists &&
+          lists.map((list) => {
+            return (
+              <div>
+                <h3>{list.name}</h3>
+                <div
+                  data-list-state={list.name}
+                  onDragOver={handleOnDragOverTodo}
+                  onDrop={handleOnDropTodo}
+                  className="list"
+                >
+                  {todos &&
+                    todos
+                      .filter((todo) => todo.state === list.name)
+                      .map((todo) => {
+                        return (
+                          <div
+                            key={todo.id}
+                            draggable
+                            onDragStart={() => handleOnDragStartTodo(todo.id)}
+                            className="todo"
+                          >
+                            <p>{todo.name}</p>
+                          </div>
+                        );
+                      })}
+                </div>
+              </div>
+            );
+          })}
       </section>
     </div>
   );
