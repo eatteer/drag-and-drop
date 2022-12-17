@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .board {
+    @apply flex gap-4 border border-red-600;
+  }
+
+  .list {
+    @apply w-60 p-4 border border-blue-600;
+  }
+
+  .todo {
+    @apply p-4 border border-black;
+  }
+}
