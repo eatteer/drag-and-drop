@@ -23,6 +23,7 @@ function App() {
       state: "Todo",
     };
     setTodos((previousTodos) => [...previousTodos, newTodo]);
+    setNewTodoName("");
   };
 
   const handleAddNewList = (event) => {
@@ -32,6 +33,7 @@ function App() {
       name: newListName,
     };
     setLists((previousLists) => [...previousLists, newList]);
+    setNewListName("");
   };
 
   const handleNewTodoOnChange = (event) => {
